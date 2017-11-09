@@ -114,4 +114,3 @@ if __name__ == "__main__":
     print(tr.local_tau)
 
     # ok, doesn't explode, but we need to test the correcteness of the function...
-    
