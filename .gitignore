@@ -1,0 +1,10 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# pycharm files
+.idea/
+
+.DS_Store
+
+# python files
+*.pyc
