@@ -1,37 +1,9 @@
 import random
 import collections
 
-from enum import Enum
+from triest.stream_graph import EdgeStream, EdgeStreamElement, Symbol
 from triest.graph import Graph, EdgeSample
 open_file_as_graph = Graph.open_file_as_graph
-
-
-class Symbol(Enum):
-    PLUS = 1
-    MINUS = 2
-
-
-class EdgeStream:
-    def __init__(self, raw_edges):
-        self.edges = self.convert_raw_edges(raw_edges)
-
-    def convert_raw_edges(self, raw_edges):
-        edges = [None]*len(raw_edges)
-        for i, edge in enumerate(raw_edges):
-            edges[i] = EdgeStreamElement(Symbol.PLUS, edge)
-        return edges
-
-
-class EdgeStreamElement:
-    def __init__(self, symbol, edge):
-        self.symbol = symbol
-        self.edge = edge
-
-    def __str__(self):
-        return "({}, ({}, {}))".format(self.symbol, self.edge.u, self.edge.v)
-
-    def __repr__(self):
-        return str(self)
 
 
 class Triest:
@@ -86,12 +58,10 @@ if __name__ == "__main__":
 
     file = '../data/out.arenas-jazz'
     graph = open_file_as_graph(file)
+    edge_stream = EdgeStream(graph.edges)
 
-    edges_stream = EdgeStream(graph.edges)
-
-    # print(edges_stream.edges)
     M = 3000
-    tr = Triest(edges_stream.edges, M)
+    tr = Triest(edge_stream.elements, M)
 
     tr.init()
     print(tr.triangles_estimation())
