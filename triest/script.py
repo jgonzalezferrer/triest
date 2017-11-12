@@ -2,6 +2,8 @@ import random
 import collections
 
 from enum import Enum
+from triest.graph import Graph
+open_file_as_graph = Graph.open_file_as_graph
 
 
 class Symbol(Enum):
@@ -11,7 +13,7 @@ class Symbol(Enum):
 
 class EdgeStream:
     def __init__(self, raw_edges):
-        self.edges = self.convert_raw_edges(edges)
+        self.edges = self.convert_raw_edges(raw_edges)
 
     def convert_raw_edges(self, raw_edges):
         edges = [None]*len(raw_edges)
@@ -32,16 +34,6 @@ class EdgeStreamElement:
         return str(self)
 
 
-class Edge:
-    def __init__(self, u, v):
-        self.u = u
-        self.v = v
-
-    def __str__(self):
-        return "({}, {})".format(self.u, self.v)
-
-    def __repr__(self):
-        return str(self)
 
 
 class EdgeSample:
@@ -124,23 +116,11 @@ class Triest:
         return xi * self.tau
 
 
-def open_file_as_graph(filename):
-    edges = []
-    with open(filename) as f:
-        content = f.read()
-
-        for i, line in enumerate(content.splitlines()):
-            if line.startswith('%'): continue
-            info = line.split()
-
-            edges.append(Edge(info[0], info[1]))
-
-    return edges
-
 if __name__ == "__main__":
     file = '../data/out.arenas-jazz'
-    edges = open_file_as_graph(file)
-    edges_stream = EdgeStream(edges)
+    graph = open_file_as_graph(file)
+
+    edges_stream = EdgeStream(graph.edges)
 
     # print(edges_stream.edges)
     M = 3000
