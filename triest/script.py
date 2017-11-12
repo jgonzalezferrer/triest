@@ -2,7 +2,7 @@ import random
 import collections
 
 from enum import Enum
-from triest.graph import Graph
+from triest.graph import Graph, EdgeSample
 open_file_as_graph = Graph.open_file_as_graph
 
 
@@ -34,39 +34,6 @@ class EdgeStreamElement:
         return str(self)
 
 
-
-
-class EdgeSample:
-    def __init__(self):
-        self.S = []
-
-    def __len__(self):
-        return len(self.S)
-
-    def append(self, elem):
-        self.S.append(elem)
-
-    def pop(self, ind):
-        return self.S.pop(ind)
-
-    def get_shared_neighborhood(self, edge):
-        neighborhood_u = self._get_neighborhood(edge.u)
-        neighborhood_v = self._get_neighborhood(edge.v)
-
-        shared_neighborhood = neighborhood_u.intersection(neighborhood_v)
-        return shared_neighborhood
-
-    def _get_neighborhood(self, node):
-        neighborhood = set()
-        for elem in self.S:
-            if elem.u == node:
-                neighborhood.add(elem.v)
-            elif elem.v == node:
-                neighborhood.add(elem.u)
-
-        return neighborhood
-
-
 class Triest:
     def __init__(self, edge_stream, M):
         self.edge_stream = edge_stream
@@ -75,7 +42,6 @@ class Triest:
         self.t = 0
         self.tau = 0
         self.local_tau = collections.defaultdict(int)
-        self.caca = 0
 
     def init(self):
         for edge_stream_element in self.edge_stream:
@@ -117,6 +83,7 @@ class Triest:
 
 
 if __name__ == "__main__":
+
     file = '../data/out.arenas-jazz'
     graph = open_file_as_graph(file)
 
