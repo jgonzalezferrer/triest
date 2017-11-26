@@ -1,6 +1,8 @@
-from triest.stream_graph import EdgeStream
-from triest.graph import Graph
 from triest.algorithms import TriestBase, TriestImpr
+from triest.graph import Graph
+
+from triest.stream_graph import EdgeStream
+
 open_file_as_graph = Graph.open_file_as_graph
 
 if __name__ == "__main__":

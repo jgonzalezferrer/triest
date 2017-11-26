@@ -1,12 +1,12 @@
+import collections
+import random
 from abc import ABC, abstractmethod
 
-import collections, random
 from triest.graph import EdgeSample
 from triest.stream_graph import EdgeStreamElement, Symbol
 
 
 class AbstractTriest(ABC):
-
     def __init__(self, edge_stream, M):
         self.edge_stream = edge_stream
         self.M = M
@@ -19,17 +19,19 @@ class AbstractTriest(ABC):
     def run(self):
         for edge_stream_element in self.edge_stream:
             self.t += 1
-            if isinstance(self, TriestImpr): self.update_counters(edge_stream_element)
+            if isinstance(self, TriestImpr):
+                self.update_counters(edge_stream_element)
 
-            if self.sample_edge(edge_stream_element.edge, self.t):
+            if self.should_sample_edge(self.t):
                 self.S.append(edge_stream_element.edge)
-                if isinstance(self, TriestBase): self.update_counters(edge_stream_element)
+                if isinstance(self, TriestBase):
+                    self.update_counters(edge_stream_element)
 
-    def sample_edge(self, edge, t):
+    def should_sample_edge(self, t):
         if t <= self.M:
             return True
-        elif self.flip_biased_coin(self.M/t):
-            random_int = random.randint(0, len(self.S)-1)
+        elif self.flip_biased_coin(self.M / t):
+            random_int = random.randint(0, len(self.S) - 1)
             random_edge = self.S.pop(random_int)
 
             if isinstance(self, TriestBase):
@@ -69,12 +71,10 @@ class AbstractTriest(ABC):
 
 
 class TriestBase(AbstractTriest):
-
     def run(self):
         super().run()
 
 
 class TriestImpr(AbstractTriest):
-
     def run(self):
         super().run()
